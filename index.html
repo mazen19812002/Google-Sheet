@@ -170,15 +170,9 @@
         document.getElementById('personalForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // IMPORTANT: You cannot use the Google Sheet URL here.
-            // Paste the resulting "https://script.google.com/macros/s/..." Web App URL below:
+            // Updated with your specific Google Apps Script URL
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwIs4XdfxZITtErMyWAbGE0chzBNXCn43qrHt-6PmskpftQTqRyyJynd4W-9JKoOaGXXg/exec';
             
-            if (scriptURL === 'https://script.google.com/macros/s/AKfycbwIs4XdfxZITtErMyWAbGE0chzBNXCn43qrHt-6PmskpftQTqRyyJynd4W-9JKoOaGXXg/exec' || scriptURL.includes('docs.google.com')) {
-                showMessage('Error: Please replace the placeholder with your Apps Script Web App URL, not the Sheet URL.', 'bg-red-100 text-red-800 border border-red-200');
-                return;
-            }
-
             const form = document.forms['personalForm'];
             const submitButton = form.querySelector('button[type="submit"]');
             const originalButtonText = submitButton.innerHTML;
