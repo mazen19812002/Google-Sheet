@@ -148,7 +148,19 @@
         let allRecords = [];
         let selectedRecord = null;
 
-        // --- Core Functions ---
+        // Helper to find data in objects regardless of key naming (spaces/case)
+        function getSmartValue(obj, possibleKeys) {
+            const keys = Object.keys(obj);
+            for (const pk of possibleKeys) {
+                // Try exact match first
+                if (obj[pk] !== undefined) return obj[pk];
+                // Try normalized match (lowercase, no spaces)
+                const normalizedPK = pk.toLowerCase().replace(/\s/g, '');
+                const foundKey = keys.find(k => k.toLowerCase().replace(/\s/g, '') === normalizedPK);
+                if (foundKey) return obj[foundKey];
+            }
+            return 'N/A';
+        }
 
         async function fetchRecords() {
             const body = document.getElementById('tableBody');
@@ -172,12 +184,17 @@
                 row.className = "hover:bg-blue-50 cursor-pointer transition-colors";
                 row.onclick = () => showPreview(record);
                 
+                // Smart extraction of fields
+                const timestamp = getSmartValue(record, ['Timestamp']);
+                const name = getSmartValue(record, ['fullName', 'Full Name', 'Name']);
+                const email = getSmartValue(record, ['email', 'Email Address', 'Email']);
+
                 row.innerHTML = `
-                    <td class="p-4 text-xs text-gray-400">${record.Timestamp || record.timestamp || 'N/A'}</td>
-                    <td class="p-4 font-medium text-gray-700">${record.fullName || 'N/A'}</td>
-                    <td class="p-4 text-gray-500">${record.email || 'N/A'}</td>
+                    <td class="p-4 text-xs text-gray-400">${timestamp}</td>
+                    <td class="p-4 font-medium text-gray-700">${name}</td>
+                    <td class="p-4 text-gray-500">${email}</td>
                     <td class="p-4">
-                        <button onclick="deleteRecord(event, '${record.Timestamp || record.timestamp}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-xs font-bold shadow hover-scale">Delete</button>
+                        <button onclick="deleteRecord(event, '${timestamp}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-xs font-bold shadow hover-scale">Delete</button>
                     </td>
                 `;
                 body.appendChild(row);
@@ -208,6 +225,10 @@
 
         async function deleteRecord(event, id) {
             event.stopPropagation();
+            if (id === 'N/A') {
+                alert("Cannot delete: Record ID (Timestamp) not found.");
+                return;
+            }
             if (!confirm("Are you sure you want to delete this record?")) return;
 
             const btn = event.target;
@@ -221,7 +242,7 @@
 
                 await fetch(scriptURL, { method: 'POST', body: formData });
                 fetchRecords();
-                if (selectedRecord && (selectedRecord.Timestamp === id || selectedRecord.timestamp === id)) {
+                if (selectedRecord && (getSmartValue(selectedRecord, ['Timestamp']) === id)) {
                     document.getElementById('previewContent').innerHTML = '<p class="text-gray-400 italic text-center py-20">Record deleted.</p>';
                 }
             } catch (e) {
