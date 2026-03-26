@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Data Form & Report</title>
+    <title>Personal Data Form & Record Viewer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Hover scale transitions for interactive elements */
@@ -14,98 +14,116 @@
             transform: scale(1.05);
         }
 
-        /* Print Specific Layout logic */
+        /* Fixed Print Logic */
         @media print {
-            body * { visibility: hidden; }
-            #printReportContainer, #printReportContainer * { visibility: visible; }
-            #printReportContainer {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                padding: 0;
-            }
             .no-print { display: none !important; }
+            #printReportContainer { 
+                display: block !important; 
+                visibility: visible !important;
+                position: relative !important;
+                width: 100% !important;
+            }
+            body { background-color: white !important; }
         }
     </style>
 </head>
 <body class="bg-blue-100 min-h-screen flex flex-col font-sans text-gray-800">
 
-    <!-- Form Section - Hidden during printing -->
-    <div class="flex-grow flex items-center justify-center p-4 sm:p-8 no-print">
+    <!-- Main Container - Hidden during printing -->
+    <div class="flex-grow flex flex-col items-center justify-center p-4 sm:p-8 no-print space-y-8">
+        
+        <!-- Form Section -->
         <main class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl p-6 sm:p-12 border border-blue-50">
-            
-            <h1 class="text-4xl sm:text-5xl font-thin text-center text-blue-900 mb-12 tracking-tight">
+            <h1 class="text-4xl sm:text-5xl font-thin text-center text-blue-900 mb-10 tracking-tight">
                 Personal Data Form
             </h1>
             
-            <form id="personalForm" class="space-y-8">
-                <!-- Full Name Field -->
+            <form id="personalForm" class="space-y-6">
                 <div class="group">
-                    <label class="block text-xl font-light text-gray-500 mb-2">Full Name</label>
+                    <label class="block text-lg font-light text-gray-500 mb-1">Full Name</label>
                     <input type="text" name="fullName" required placeholder="Enter full name"
-                        class="w-full px-6 py-4 text-xl rounded-2xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-4 focus:ring-blue-200 outline-none hover-scale">
+                        class="w-full px-5 py-3 text-lg rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-4 focus:ring-blue-200 outline-none hover-scale">
                 </div>
 
-                <!-- Email & Phone Number Row -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="group">
-                        <label class="block text-xl font-light text-gray-500 mb-2">Email Address</label>
+                        <label class="block text-lg font-light text-gray-500 mb-1">Email Address</label>
                         <input type="email" name="email" required placeholder="email@example.com"
-                            class="w-full px-6 py-4 text-xl rounded-2xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-4 focus:ring-blue-200 outline-none hover-scale">
+                            class="w-full px-5 py-3 text-lg rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-4 focus:ring-blue-200 outline-none hover-scale">
                     </div>
                     <div class="group">
-                        <label class="block text-xl font-light text-gray-500 mb-2">Phone Number</label>
+                        <label class="block text-lg font-light text-gray-500 mb-1">Phone Number</label>
                         <input type="tel" name="phone" required placeholder="Phone number"
-                            class="w-full px-6 py-4 text-xl rounded-2xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-4 focus:ring-blue-200 outline-none hover-scale">
+                            class="w-full px-5 py-3 text-lg rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-4 focus:ring-blue-200 outline-none hover-scale">
                     </div>
                 </div>
 
-                <!-- DOB & Address Row -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="group">
-                        <label class="block text-xl font-light text-gray-500 mb-2">Date of Birth</label>
+                        <label class="block text-lg font-light text-gray-500 mb-1">Date of Birth</label>
                         <input type="date" name="dob" required
-                            class="w-full px-6 py-4 text-xl rounded-2xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-4 focus:ring-blue-200 outline-none hover-scale">
+                            class="w-full px-5 py-3 text-lg rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-4 focus:ring-blue-200 outline-none hover-scale">
                     </div>
                     <div class="group">
-                        <label class="block text-xl font-light text-gray-500 mb-2">Address</label>
+                        <label class="block text-lg font-light text-gray-500 mb-1">Address</label>
                         <input type="text" name="address" required placeholder="Full address"
-                            class="w-full px-6 py-4 text-xl rounded-2xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-4 focus:ring-blue-200 outline-none hover-scale">
+                            class="w-full px-5 py-3 text-lg rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-4 focus:ring-blue-200 outline-none hover-scale">
                     </div>
                 </div>
 
-                <!-- Feedback Message Container -->
-                <div id="messageBox" class="hidden text-center py-4 px-6 rounded-2xl font-medium text-lg transition-all"></div>
+                <div id="messageBox" class="hidden text-center py-3 px-6 rounded-xl font-medium text-lg transition-all"></div>
 
-                <!-- Action Buttons -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
                     <button type="button" onclick="fillRandomData()" 
-                        class="bg-green-500 hover:bg-green-600 text-white py-5 rounded-2xl text-xl font-bold shadow-lg hover-scale">
+                        class="bg-green-500 hover:bg-green-600 text-white py-4 rounded-xl text-lg font-bold shadow-md hover-scale">
                         Random Data
                     </button>
-
                     <button type="submit" 
-                        class="bg-green-600 hover:bg-green-700 text-white py-5 rounded-2xl text-xl font-bold shadow-lg hover-scale">
+                        class="bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl text-lg font-bold shadow-md hover-scale">
                         Submit Data
                     </button>
-
-                    <button type="button" id="printBtn" onclick="fetchAndPrintReport()"
-                        class="bg-green-500 hover:bg-green-600 text-white py-5 rounded-2xl text-xl font-bold shadow-lg hover-scale">
-                        Print Report
+                    <button type="button" onclick="fetchRecords()"
+                        class="bg-blue-500 hover:bg-blue-600 text-white py-4 rounded-xl text-lg font-bold shadow-md hover-scale">
+                        View Records
                     </button>
-
                     <button type="reset" onclick="hideMessage()"
-                        class="bg-red-500 hover:bg-red-600 text-white py-5 rounded-2xl text-xl font-bold shadow-lg hover-scale">
+                        class="bg-red-500 hover:bg-red-600 text-white py-4 rounded-xl text-lg font-bold shadow-md hover-scale">
                         Clear Form
                     </button>
                 </div>
             </form>
         </main>
+
+        <!-- Individual Record Viewer Section -->
+        <section id="recordViewer" class="hidden w-full max-w-4xl bg-white rounded-3xl shadow-xl p-8 border border-blue-50 text-center">
+            <h2 class="text-3xl font-thin text-blue-900 mb-6">Database Records</h2>
+            
+            <div id="recordDisplay" class="bg-blue-50 rounded-2xl p-6 mb-6 text-left space-y-3 min-h-[200px] flex flex-col justify-center">
+                <!-- Single record content injected here -->
+                <p class="text-center text-gray-500 italic">No record selected.</p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex gap-2">
+                    <button onclick="prevRecord()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-bold hover-scale text-sm">
+                        &larr; Back
+                    </button>
+                    <span id="recordCounter" class="flex items-center px-4 font-light text-gray-600">0 / 0</span>
+                    <button onclick="nextRecord()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-bold hover-scale text-sm">
+                        Next &rarr;
+                    </button>
+                </div>
+                
+                <button type="button" onclick="fetchAndPrintReport()" id="printBtn"
+                    class="bg-green-600 hover:bg-green-700 text-white py-3 px-8 rounded-xl text-lg font-bold shadow-md hover-scale">
+                    Print Full Report (PDF)
+                </button>
+            </div>
+        </section>
     </div>
 
-    <!-- Hidden Print Container - Only visible during print window -->
-    <div id="printReportContainer" class="hidden p-10 bg-white">
+    <!-- Hidden Print Container - Only shown during printing -->
+    <div id="printReportContainer" class="hidden bg-white text-black p-10">
         <h1 class="text-4xl font-thin text-center text-blue-900 mb-8 border-b pb-4">Personal Data Report</h1>
         <div id="tableTarget"></div>
         <div class="mt-10 text-center text-gray-400 font-light border-t pt-6 italic">
@@ -113,7 +131,7 @@
         </div>
         <div class="mt-6 text-center text-lg font-bold text-blue-900">
             All rights are reserved to Dr. Mazen Badawy – Doctorate of English Teaching & Testing
-        </p>
+        </div>
     </div>
 
     <!-- Persistent Footer -->
@@ -124,10 +142,12 @@
     </footer>
 
     <script>
-        // Updated Google Apps Script Web App URL
         const scriptURL = 'https://script.google.com/macros/s/AKfycbxFzhUvqMIjx3g2o4RFxCH0DTI9JPkb57oJ1hB1psgiMXsAchEms5O0RMw-5ZwK7M4jaw/exec';
 
-        // Sample Data Lists for Random Generation
+        let allRecords = [];
+        let currentIndex = 0;
+
+        // Random Data Generator
         const fn = ["Ahmed", "Mazen", "Sarah", "Laila", "Omar", "Youssef", "Mariam", "Zaid"];
         const ln = ["Badawy", "Hassan", "Ali", "Smith", "Mansour", "Ibrahim", "Abdelaziz", "Fahmy"];
         
@@ -136,76 +156,139 @@
             const l = ln[Math.floor(Math.random()*ln.length)];
             const form = document.getElementById('personalForm');
             form.fullName.value = f + " " + l;
-            form.email.value = f.toLowerCase() + "." + l.toLowerCase() + Math.floor(Math.random()*100) + "@example.com";
+            form.email.value = f.toLowerCase() + "." + l.toLowerCase() + "@example.com";
             form.phone.value = "+20 1" + Math.floor(100000000 + Math.random() * 900000000);
-            form.dob.value = (1970 + Math.floor(Math.random()*35)) + "-0" + (Math.floor(Math.random()*9)+1) + "-15";
-            form.address.value = Math.floor(Math.random()*150) + " Educational District, Cairo";
-            showMessage('Sample data loaded successfully.', 'bg-blue-100 text-blue-800');
+            form.dob.value = (1970 + Math.floor(Math.random()*35)) + "-01-15";
+            form.address.value = Math.floor(Math.random()*150) + " Education St, Cairo";
+            showMessage('Sample data generated.', 'bg-blue-100 text-blue-800');
         }
 
         function showMessage(t, c) {
             const b = document.getElementById('messageBox');
             b.textContent = t;
-            b.className = `block mt-4 py-4 px-6 rounded-2xl font-medium text-lg ${c}`;
+            b.classList.remove('hidden');
+            b.className = `block mt-4 py-3 px-6 rounded-xl font-medium text-lg ${c}`;
             setTimeout(() => b.classList.add('hidden'), 5000);
         }
 
         function hideMessage() { document.getElementById('messageBox').classList.add('hidden'); }
 
-        // POST Data Submission
+        // POST Submission
         document.getElementById('personalForm').addEventListener('submit', e => {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
             const originalText = btn.textContent;
             btn.disabled = true;
-            btn.textContent = "Processing...";
+            btn.textContent = "Saving...";
 
             fetch(scriptURL, { method: 'POST', body: new FormData(e.target)})
                 .then(() => {
-                    showMessage('Success! Personal data saved to the database.', 'bg-green-100 text-green-800');
+                    showMessage('Success! Data saved to Sheets.', 'bg-green-100 text-green-800');
                     e.target.reset();
+                    fetchRecords(); // Refresh viewer after submit
                 })
-                .catch(() => showMessage('Error: Connection failed. Check your script deployment.', 'bg-red-100 text-red-800'))
+                .catch(() => showMessage('Error saving data.', 'bg-red-100 text-red-800'))
                 .finally(() => {
                     btn.disabled = false;
                     btn.textContent = originalText;
                 });
         });
 
-        // GET Data & Print Report
-        function fetchAndPrintReport() {
-            const btn = document.getElementById('printBtn');
-            const originalText = btn.textContent;
-            btn.disabled = true;
-            btn.textContent = "Fetching...";
+        // Fetch Data for Viewer
+        function fetchRecords() {
+            const viewer = document.getElementById('recordViewer');
+            const display = document.getElementById('recordDisplay');
+            viewer.classList.remove('hidden');
+            display.innerHTML = '<p class="text-center text-blue-600 animate-pulse">Loading database...</p>';
 
             fetch(scriptURL)
                 .then(r => r.json())
                 .then(data => {
-                    if(!data || data.length === 0) {
-                        showMessage('No records found in the database.', 'bg-yellow-100 text-yellow-800');
+                    allRecords = data;
+                    if (!allRecords || allRecords.length === 0) {
+                        display.innerHTML = '<p class="text-center text-gray-500 italic">No records found.</p>';
                         return;
                     }
+                    currentIndex = allRecords.length - 1; // Show newest first
+                    updateRecordView();
+                })
+                .catch(err => {
+                    display.innerHTML = '<p class="text-center text-red-500">Failed to fetch data.</p>';
+                });
+        }
+
+        function updateRecordView() {
+            const display = document.getElementById('recordDisplay');
+            const counter = document.getElementById('recordCounter');
+            
+            if (allRecords.length === 0) return;
+
+            const record = allRecords[currentIndex];
+            let html = '<div class="grid grid-cols-1 gap-2">';
+            for (const [key, value] of Object.entries(record)) {
+                html += `<div><span class="font-bold text-blue-900">${key}:</span> <span class="text-gray-700">${value}</span></div>`;
+            }
+            html += '</div>';
+            
+            display.innerHTML = html;
+            counter.innerText = `${currentIndex + 1} / ${allRecords.length}`;
+        }
+
+        function nextRecord() {
+            if (currentIndex < allRecords.length - 1) {
+                currentIndex++;
+                updateRecordView();
+            }
+        }
+
+        function prevRecord() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateRecordView();
+            }
+        }
+
+        // Print Report Logic
+        function fetchAndPrintReport() {
+            const btn = document.getElementById('printBtn');
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = "Preparing PDF...";
+
+            fetch(scriptURL)
+                .then(r => r.json())
+                .then(data => {
+                    if(!data || data.length === 0) return alert("Nothing to print.");
                     
-                    // Construct printable table
-                    let html = '<table class="w-full border-collapse border border-gray-200"><thead><tr class="bg-gray-100">';
-                    Object.keys(data[0]).forEach(h => html += `<th class="border border-gray-300 p-3 text-left font-bold text-gray-700">${h}</th>`);
+                    const printContainer = document.getElementById('printReportContainer');
+                    const target = document.getElementById('tableTarget');
+                    
+                    let html = '<table class="w-full border-collapse border border-gray-300"><thead><tr class="bg-gray-100">';
+                    Object.keys(data[0]).forEach(h => html += `<th class="border border-gray-300 p-2 text-left text-sm font-bold text-gray-700">${h}</th>`);
                     html += '</tr></thead><tbody>';
                     data.forEach(row => {
-                        html += '<tr class="hover:bg-gray-50">';
-                        Object.values(row).forEach(v => html += `<td class="border border-gray-300 p-3 text-gray-600">${v}</td>`);
+                        html += '<tr>';
+                        Object.values(row).forEach(v => html += `<td class="border border-gray-300 p-2 text-xs text-gray-600">${v}</td>`);
                         html += '</tr>';
                     });
                     html += '</tbody></table>';
 
-                    document.getElementById('tableTarget').innerHTML = html;
+                    target.innerHTML = html;
                     document.getElementById('genDate').innerText = new Date().toLocaleString();
                     
-                    // Trigger native print
-                    window.print();
+                    // Show the container before printing to ensure render
+                    printContainer.classList.remove('hidden');
+                    
+                    // Small delay to let browser render the table fully
+                    setTimeout(() => {
+                        window.print();
+                        printContainer.classList.add('hidden');
+                        btn.disabled = false;
+                        btn.textContent = originalText;
+                    }, 500);
                 })
-                .catch(() => showMessage('Failed to fetch data. Ensure doGet is implemented in script.', 'bg-red-100 text-red-800'))
-                .finally(() => {
+                .catch(() => {
+                    alert("Error preparing report.");
                     btn.disabled = false;
                     btn.textContent = originalText;
                 });
